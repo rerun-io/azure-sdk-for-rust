@@ -7,10 +7,11 @@ use crate::generated::{
 };
 use azure_core::{
     credentials::TokenCredential,
-    http::{NoFormat, RawResponse, RequestContent, Response, StatusCode, Url, XmlFormat},
+    http::{NoFormat, RequestContent, Response, StatusCode, Url, XmlFormat},
     xml, Result,
 };
 use std::{collections::HashMap, sync::Arc};
+use typespec_client_core::http::RawResponse;
 
 /// A client to interact with a specific Azure storage queue, although that queue may not yet exist.
 pub struct QueueClient {
@@ -336,7 +337,7 @@ impl QueueClient {
 
         let messages = extract_fn(&message_list);
         let first_message = messages.into_iter().next().ok_or_else(|| {
-            azure_core::Error::message(
+            azure_core::Error::with_message(
                 azure_core::error::ErrorKind::DataConversion,
                 "No messages found in the response",
             )
