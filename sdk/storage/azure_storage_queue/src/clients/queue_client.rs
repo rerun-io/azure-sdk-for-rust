@@ -7,11 +7,10 @@ use crate::generated::{
 };
 use azure_core::{
     credentials::TokenCredential,
-    http::{NoFormat, RequestContent, Response, StatusCode, Url, XmlFormat},
+    http::{BufResponse, NoFormat, RequestContent, Response, StatusCode, Url, XmlFormat},
     xml, Result,
 };
 use std::{collections::HashMap, sync::Arc};
-use typespec_client_core::http::RawResponse;
 
 /// A client to interact with a specific Azure storage queue, although that queue may not yet exist.
 pub struct QueueClient {
@@ -344,7 +343,7 @@ impl QueueClient {
         })?;
 
         let xml_body = xml::to_xml(&first_message)?;
-        let raw_response = RawResponse::from_bytes(status, headers, xml_body);
+        let raw_response = BufResponse::from_bytes(status, headers, xml_body);
         Ok(raw_response.into())
     }
 }

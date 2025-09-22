@@ -62,7 +62,7 @@ impl QueueClient {
         let options = options.unwrap_or_default();
         let endpoint = Url::parse(endpoint)?;
         if !endpoint.scheme().starts_with("http") {
-            return Err(azure_core::Error::message(
+            return Err(azure_core::Error::with_message(
                 azure_core::error::ErrorKind::Other,
                 format!("{endpoint} must use http(s)"),
             ));
@@ -112,8 +112,8 @@ impl QueueClient {
             request.insert_header("x-ms-client-request-id", client_request_id);
         }
         request.insert_header("x-ms-version", &self.version);
-        let rsp = self.pipeline.send(&ctx, &mut request).await?;
-        let rsp = check_success(rsp).await?;
+        let rsp = self.pipeline.send(&ctx, &mut request, None).await?;
+        let rsp = check_success(rsp, None).await?;
         Ok(rsp.into())
     }
 
@@ -145,8 +145,8 @@ impl QueueClient {
             }
         }
         request.insert_header("x-ms-version", &self.version);
-        let rsp = self.pipeline.send(&ctx, &mut request).await?;
-        let rsp = check_success(rsp).await?;
+        let rsp = self.pipeline.send(&ctx, &mut request, None).await?;
+        let rsp = check_success(rsp, None).await?;
         Ok(rsp.into())
     }
 
@@ -178,8 +178,8 @@ impl QueueClient {
             }
         }
         request.insert_header("x-ms-version", &self.version);
-        let rsp = self.pipeline.send(&ctx, &mut request).await?;
-        let rsp = check_success(rsp).await?;
+        let rsp = self.pipeline.send(&ctx, &mut request, None).await?;
+        let rsp = check_success(rsp, None).await?;
         Ok(rsp.into())
     }
 
@@ -199,7 +199,7 @@ impl QueueClient {
         options: Option<QueueClientDeleteMessageOptions<'_>>,
     ) -> Result<Response<(), NoFormat>> {
         if message_id.is_empty() {
-            return Err(azure_core::Error::message(
+            return Err(azure_core::Error::with_message(
                 azure_core::error::ErrorKind::Other,
                 "parameter message_id cannot be empty",
             ));
@@ -217,8 +217,8 @@ impl QueueClient {
             request.insert_header("x-ms-client-request-id", client_request_id);
         }
         request.insert_header("x-ms-version", &self.version);
-        let rsp = self.pipeline.send(&ctx, &mut request).await?;
-        let rsp = check_success(rsp).await?;
+        let rsp = self.pipeline.send(&ctx, &mut request, None).await?;
+        let rsp = check_success(rsp, None).await?;
         Ok(rsp.into())
     }
 
@@ -273,8 +273,8 @@ impl QueueClient {
             request.insert_header("x-ms-client-request-id", client_request_id);
         }
         request.insert_header("x-ms-version", &self.version);
-        let rsp = self.pipeline.send(&ctx, &mut request).await?;
-        let rsp = check_success(rsp).await?;
+        let rsp = self.pipeline.send(&ctx, &mut request, None).await?;
+        let rsp = check_success(rsp, None).await?;
         Ok(rsp.into())
     }
 
@@ -327,8 +327,8 @@ impl QueueClient {
             request.insert_header("x-ms-client-request-id", client_request_id);
         }
         request.insert_header("x-ms-version", &self.version);
-        let rsp = self.pipeline.send(&ctx, &mut request).await?;
-        let rsp = check_success(rsp).await?;
+        let rsp = self.pipeline.send(&ctx, &mut request, None).await?;
+        let rsp = check_success(rsp, None).await?;
         Ok(rsp.into())
     }
 
@@ -361,8 +361,8 @@ impl QueueClient {
             request.insert_header("x-ms-client-request-id", client_request_id);
         }
         request.insert_header("x-ms-version", &self.version);
-        let rsp = self.pipeline.send(&ctx, &mut request).await?;
-        let rsp = check_success(rsp).await?;
+        let rsp = self.pipeline.send(&ctx, &mut request, None).await?;
+        let rsp = check_success(rsp, None).await?;
         Ok(rsp.into())
     }
 
@@ -402,8 +402,8 @@ impl QueueClient {
             request.insert_header("x-ms-client-request-id", client_request_id);
         }
         request.insert_header("x-ms-version", &self.version);
-        let rsp = self.pipeline.send(&ctx, &mut request).await?;
-        let rsp = check_success(rsp).await?;
+        let rsp = self.pipeline.send(&ctx, &mut request, None).await?;
+        let rsp = check_success(rsp, None).await?;
         Ok(rsp.into())
     }
 
@@ -446,8 +446,8 @@ impl QueueClient {
         }
         request.insert_header("x-ms-version", &self.version);
         request.set_body(queue_message);
-        let rsp = self.pipeline.send(&ctx, &mut request).await?;
-        let rsp = check_success(rsp).await?;
+        let rsp = self.pipeline.send(&ctx, &mut request, None).await?;
+        let rsp = check_success(rsp, None).await?;
         Ok(rsp.into())
     }
 
@@ -504,8 +504,8 @@ impl QueueClient {
         }
         request.insert_header("x-ms-version", &self.version);
         request.set_body(queue_acl);
-        let rsp = self.pipeline.send(&ctx, &mut request).await?;
-        let rsp = check_success(rsp).await?;
+        let rsp = self.pipeline.send(&ctx, &mut request, None).await?;
+        let rsp = check_success(rsp, None).await?;
         Ok(rsp.into())
     }
 
@@ -540,8 +540,8 @@ impl QueueClient {
             request.insert_header(format!("x-ms-meta-{k}"), v);
         }
         request.insert_header("x-ms-version", &self.version);
-        let rsp = self.pipeline.send(&ctx, &mut request).await?;
-        let rsp = check_success(rsp).await?;
+        let rsp = self.pipeline.send(&ctx, &mut request, None).await?;
+        let rsp = check_success(rsp, None).await?;
         Ok(rsp.into())
     }
 
@@ -570,7 +570,7 @@ impl QueueClient {
         options: Option<QueueClientUpdateOptions<'_>>,
     ) -> Result<Response<(), NoFormat>> {
         if message_id.is_empty() {
-            return Err(azure_core::Error::message(
+            return Err(azure_core::Error::with_message(
                 azure_core::error::ErrorKind::Other,
                 "parameter message_id cannot be empty",
             ));
@@ -594,8 +594,8 @@ impl QueueClient {
         if let Some(queue_message) = options.queue_message {
             request.set_body(queue_message);
         }
-        let rsp = self.pipeline.send(&ctx, &mut request).await?;
-        let rsp = check_success(rsp).await?;
+        let rsp = self.pipeline.send(&ctx, &mut request, None).await?;
+        let rsp = check_success(rsp, None).await?;
         Ok(rsp.into())
     }
 }
